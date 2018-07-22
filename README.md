@@ -12,15 +12,14 @@ They are written as Python Notebooks so they can be easily modified
 and run again.
 
 
-## Videos
+### Videos
 
 There is a [YouTube video](https://www.youtube.com/playlist?list=PL9Hr9sNUjfsmlHaWuVxIA0pKL1yjryR0Z) for each research paper.
 
 
 ## Papers
 
-1. Forecasting Long-Term Stock Returns ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
-
+1. Forecasting Long-Term Stock Returns ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
 
 ## Downloading
 
@@ -48,7 +47,8 @@ the contents of the GitHub repository as a Zip-file and extract it manually.
 
 ## How To Run
 
-It is suggested that you use the [Anaconda](https://www.anaconda.com/download)
+If you want to edit and run the Notebooks on your own computer, then it is
+suggested that you use the [Anaconda](https://www.anaconda.com/download)
 distribution of **Python 3.6** (or later) because it has all the required packages
 already installed. Once you have installed Anaconda, you run the following
 command from the `FinanceOps` directory to view and edit the Notebooks:
@@ -57,6 +57,23 @@ command from the `FinanceOps` directory to view and edit the Notebooks:
 
 If you want to edit the other source-code then you may use the free version of [PyCharm](https://www.jetbrains.com/pycharm/).
 
+
+### Run in Google Colab
+
+If you do not want to install anything on your own computer, then the Notebooks
+can be viewed, edited and run entirely on the internet by using
+[Google Colab](https://colab.research.google.com).
+You can click the "Google Colab"-link next to the research papers listed above.
+You can view the Notebook on Colab but in order to run it you need to login using
+your Google account.
+Then you need to execute the following commands at the top of the Notebook,
+which clones FinanceOps to your work-directory on Colab.
+
+    import os
+    work_dir = "/content/FinanceOps/"
+    if os.getcwd() != work_dir:
+        !git clone https://github.com/Hvass-Labs/FinanceOps.git
+    os.chdir(work_dir)
 
 ## Data Sources
 
