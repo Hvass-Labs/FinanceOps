@@ -1,0 +1,21 @@
+################################################################
+#
+# Python package requirements for FinanceOps:
+# https://github.com/Hvass-Labs/FinanceOps
+#
+# If you are using Anaconda then you can install all required
+# Python packages by running the following commands in a shell:
+#
+#     conda create --name FinanceOps python=3
+#     source activate FinanceOps
+#     pip install -r requirements.txt
+#
+################################################################
+
+numpy
+scipy
+matplotlib
+pandas
+jupyter
+
+################################################################
