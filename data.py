@@ -22,6 +22,7 @@
 ########################################################################
 
 import pandas as pd
+import numpy as np
 import os
 from data_keys import *
 from returns import total_return
@@ -118,7 +119,7 @@ def _load_price_yahoo(ticker):
 def load_usa_cpi():
     """
     Load the U.S. Consumer Price Index (CPI) which measures inflation.
-    The data is interpolated for daily values.
+    The data is interpolated to get daily values.
 
     http://www.bls.gov/cpi/data.htm
 
@@ -141,19 +142,45 @@ def load_usa_cpi():
     return data_daily
 
 
-def load_index_data(ticker):
+def load_usa_gov_bond_1year():
+    """
+    Load the yields on U.S. Government Bonds with 1-year maturity.
+    The data is interpolated to get daily values.
+
+    :return: Pandas DataFrame.
+    """
+
+    # Path for the data-file to load.
+    path = os.path.join(data_dir, "USA Gov Bond Yield 1-Year.txt")
+
+    # Load the data.
+    bond_yields = _load_data(path=path)
+
+    # Remove rows with NA.
+    bond_yields.dropna(inplace=True)
+
+    # Scale the data so for example 0.035 in the data means 3.5%
+    bond_yields /= 100
+
+    # Resample by linear interpolation to get daily values.
+    bond_yields_daily = _resample_daily(bond_yields)
+
+    return bond_yields_daily
+
+
+def load_index_data(ticker, sales=True, book_value=True, dividend_TTM=True):
     """
     Load data for a stock-index from several different files
     and combine them into a single Pandas DataFrame.
 
     - Price is loaded from a Yahoo-file.
-    - Dividend, Sales Per Share, and Book-Value Per Share
+    - Dividend, Sales Per Share, Book-Value Per Share, etc.
       are loaded from separate files.
 
     The Total Return is produced from the share-price and dividend.
     The P/Sales and P/Book ratios are calculated daily.
 
-    Note that dividend-data is usually given quarterly for stock
+    Note that dividend-data is often given quarterly for stock
     indices, but the individual companies pay dividends at different
     days during the quarter. When calculating the Total Return we
     assume the dividend is paid out and reinvested quarterly.
@@ -166,18 +193,26 @@ def load_index_data(ticker):
 
     :param ticker:
         Name of the stock-index used in the filenames e.g. "S&P 500"
-    :return: Pandas DataFrame with the data.
-    """
-    # Paths for the data-files.
-    path_dividend_per_share = os.path.join(data_dir, ticker + " Dividend Per Share.txt")
-    path_sales_per_share = os.path.join(data_dir, ticker + " Sales Per Share.txt")
-    path_book_value_per_share = os.path.join(data_dir, ticker + " Book-Value Per Share.txt")
 
-    # Load the data-files.
+    :param sales:
+        Boolean whether to load data-file for Sales Per Share.
+
+    :param book_value:
+        Boolean whether to load data-file for Book-Value Per Share.
+
+    :param dividend_TTM:
+        Boolean whether to load data-file for Dividend Per Share TTM.
+
+    :return:
+        Pandas DataFrame with the data.
+    """
+
+    # Load price.
     price_daily = _load_price_yahoo(ticker=ticker)
-    dividend_per_share = _load_data(path=path_dividend_per_share)
-    sales_per_share = _load_data(path=path_sales_per_share)
-    book_value_per_share = _load_data(path=path_book_value_per_share)
+
+    # Load dividend.
+    path = os.path.join(data_dir, ticker + " Dividend Per Share.txt")
+    dividend_per_share = _load_data(path=path)
 
     # Merge price and dividend into a single data-frame.
     df = pd.concat([price_daily, dividend_per_share], axis=1)
@@ -190,13 +225,41 @@ def load_index_data(ticker):
     # for stock indices because it does not reinvest dividends.
     df[TOTAL_RETURN] = total_return(df=df)
 
-    # Add financial data to the data-frame (interpolated daily).
-    df[SALES_PER_SHARE] = _resample_daily(sales_per_share)
-    df[BOOK_VALUE_PER_SHARE] = _resample_daily(book_value_per_share)
+    if sales:
+        # Load Sales Per Share data.
+        path = os.path.join(data_dir, ticker + " Sales Per Share.txt")
+        sales_per_share = _load_data(path=path)
 
-    # Add financial ratios to the data-frame (daily).
-    df[PSALES] = df[SHARE_PRICE] / df[SALES_PER_SHARE]
-    df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
+        # Add to the data-frame (interpolated daily).
+        df[SALES_PER_SHARE] = _resample_daily(sales_per_share)
+
+        # Add P/Sales ratio to the data-frame (daily).
+        df[PSALES] = df[SHARE_PRICE] / df[SALES_PER_SHARE]
+
+    if book_value:
+        # Load Book-Value Per Share data.
+        path = os.path.join(data_dir, ticker + " Book-Value Per Share.txt")
+        book_value_per_share = _load_data(path=path)
+
+        # Add to the data-frame (interpolated daily).
+        df[BOOK_VALUE_PER_SHARE] = _resample_daily(book_value_per_share)
+
+        # Add P/Book to the data-frame (daily).
+        df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
+
+    if dividend_TTM:
+        # Load Dividend Per Share TTM data.
+        path = os.path.join(data_dir, ticker + " Dividend Per Share TTM.txt")
+        dividend_per_share_TTM = _load_data(path=path)
+
+        # Add to the data-frame (interpolated daily).
+        df[DIVIDEND_TTM] = _resample_daily(dividend_per_share_TTM)
+
+        # Add Dividend Yield to the data-frame (daily).
+        df[DIVIDEND_YIELD] = df[DIVIDEND_TTM] / df[SHARE_PRICE]
+
+        # Add P/Dividend to the data-frame (daily).
+        df[PDIVIDEND] = df[SHARE_PRICE] / df[DIVIDEND_TTM]
 
     return df
 
@@ -240,5 +303,25 @@ def load_stock_data(ticker):
     df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
 
     return df
+
+
+def common_period(dfs):
+    """
+    Get the common start-date and end-date for the given DataFrames.
+
+    :param dfs: List of Pandas DataFrames.
+    :return: start_date, end_date
+    """
+
+    # Get all the start- and end-dates.
+    start_dates = [df.index[0] for df in dfs]
+    end_dates = [df.index[-1] for df in dfs]
+
+    # Get the common start- and end-dates.
+    common_start_date = np.max(start_dates)
+    common_end_date = np.min(end_dates)
+
+    return common_start_date, common_end_date
+
 
 ########################################################################

@@ -20,6 +20,7 @@ There is a [YouTube video](https://www.youtube.com/playlist?list=PL9Hr9sNUjfsmlH
 ## Papers
 
 1. Forecasting Long-Term Stock Returns ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
+2. Comparing Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb))
 
 ## Downloading
 
@@ -80,6 +81,7 @@ which clones FinanceOps to your work-directory on Colab.
 - Price data from [Yahoo Finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC).
 - Financial data for individual stocks collected manually by the author from the 10-K Forms filed with the [U.S. SEC](http://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=jnj&filenum=&State=&Country=&SIC=&owner=exclude&Find=Find+Companies&action=getcompany).
 - Newer S&P 500 data from the [S&P Earnings & Estimates Report](http://www.spindices.com/documents/additional-material/sp-500-eps-est.xlsx) and older data from the research staff at S&P and Compustat (some older data is approximated by their research staff).
+- U.S. Government Bond yield for 1-year constant maturity. From the [U.S. Federal Reserve](https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15).
 - The inflation index is: All Items Consumer Price Index for All Urban Consumers (CPI-U), U.S. City Average. From the [US Department of Labor, Bureau of Labor Statistics](http://www.bls.gov/cpi/data.htm).
 
 

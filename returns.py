@@ -144,4 +144,68 @@ def prepare_ann_returns(df, years, key=PSALES, subtract=None):
 
     return x, y
 
+
+def bond_annualized_returns(df, num_years):
+    """
+    Calculate the annualized returns from investing and reinvesting in a bond.
+
+    This results in a list of Pandas Series with the annualized returns for
+    [1, 2, ..., max_years] investment years.
+
+    For example ann_returns[0] are for 1-year investment periods and
+    ann_returns[9] are for 10-year periods.
+
+    :param df:
+        Pandas DataFrame with BOND_YIELD data for 1-year maturity.
+    :param num_years:
+        Max number of investment years.
+    :return:
+        List of Pandas Series.
+    """
+
+    # The idea is to repeatedly shift the bond-yields
+    # and update a cumulative product so as to get the
+    # compounded return through the years.
+
+    # Init the list of annualized returns. For 1-year
+    # investment periods these are just the bond-yields.
+    ann_returns = [df[BOND_YIELD].copy()]
+
+    # Init the cumulative product of bond-yields,
+    # which will be updated when reinvesting in the
+    # bonds through the years.
+    cum_prod = df[BOND_YIELD].copy() + 1.0
+
+    # Init the bond-yields shifted one year.
+    # These will be shifted 365 steps for each year.
+    shifted = cum_prod.copy()
+
+    # For increasing number of investment years.
+    # The bond-yields were used as the 1st year above.
+    for years in range(2, num_years + 1):
+        # Shift the bond-yields one year.
+        # Note leap-years are not taken into account so
+        # there will be a slight drift for longer periods,
+        # but it probably only causes a very small error.
+        shifted = shifted.shift(-365)
+
+        # Accumulate the bond-yields so cum_prod holds the
+        # cumulative return from reinvesting in the bonds.
+        cum_prod *= shifted
+
+        # Remove NA from the end of the series.
+        cum_prod.dropna(inplace=True)
+
+        # Calculate the annualized returns.
+        ann_ret = cum_prod ** (1 / years) - 1.0
+
+        # Rename the data-column.
+        ann_ret.rename(ANN_RETURN)
+
+        # Add to the list of annualized returns for all years.
+        ann_returns.append(ann_ret)
+
+    return ann_returns
+
+
 ########################################################################
