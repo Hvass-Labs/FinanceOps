@@ -337,9 +337,9 @@ class AdaptiveWeights(Model):
         weights = _sigmoid(weights)
 
         # Limit the weights between min_weights and max_weights.
-        weights = self._limit_weights(weights=weights)
+        weights, weights_cash = self._limit_weights(weights=weights)
 
-        return weights
+        return weights, weights_cash
 
 
 ########################################################################
