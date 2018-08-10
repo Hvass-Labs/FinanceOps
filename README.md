@@ -7,26 +7,29 @@ Original author is [Magnus Erik Hvass Pedersen](http://www.hvass-labs.org)
 
 ## Introduction
 
-This is a small collection of research papers on long-term investing.
-They are written as Python Notebooks so they can be easily modified
-and run again.
-
-
-### Videos
-
-There is a [YouTube video](https://www.youtube.com/playlist?list=PL9Hr9sNUjfsmlHaWuVxIA0pKL1yjryR0Z) for each research paper.
+This is a small collection of research papers on investing.
+They are written as Python Notebooks so they can easily be
+modified and run again.
 
 
 ## Papers
 
 1. Forecasting Long-Term Stock Returns ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
 2. Comparing Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb))
+3. Portfolio Optimization Using Signals ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb))
+
+
+## Videos
+
+There is a [YouTube video](https://www.youtube.com/playlist?list=PL9Hr9sNUjfsmlHaWuVxIA0pKL1yjryR0Z) for each research paper.
+
 
 ## Downloading
 
 The Python Notebooks use source-code located in different files to allow for easy re-use
 across multiple Notebooks. It is therefore recommended that you download the whole
 repository from GitHub, instead of just downloading the individual Python Notebooks.
+
 
 ### Git
 
@@ -39,6 +42,7 @@ This creates the directory `FinanceOps` and downloads all the files to it.
 This also makes it easy to update the files, simply by executing this command inside that directory:
 
     git pull
+
 
 ### Zip-File
 
@@ -75,6 +79,7 @@ which clones FinanceOps to your work-directory on Colab.
     if os.getcwd() != work_dir:
         !git clone https://github.com/Hvass-Labs/FinanceOps.git
     os.chdir(work_dir)
+
 
 ## Data Sources
 
