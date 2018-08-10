@@ -1,4 +1,4 @@
-Year	Book-Value Per Share
+Date	Book-Value Per Share
 12/31/1993	1.98
 12/31/1994	2.55
 12/31/1995	3.21

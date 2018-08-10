@@ -149,8 +149,8 @@ def bond_annualized_returns(df, num_years):
     """
     Calculate the annualized returns from investing and reinvesting in a bond.
 
-    This results in a list of Pandas Series with the annualized returns for
-    [1, 2, ..., max_years] investment years.
+    This results in a list of Pandas Series ann_returns with the annualized
+    returns for [1, 2, ..., num_years] investment years.
 
     For example ann_returns[0] are for 1-year investment periods and
     ann_returns[9] are for 10-year periods.
@@ -206,6 +206,26 @@ def bond_annualized_returns(df, num_years):
         ann_returns.append(ann_ret)
 
     return ann_returns
+
+
+def daily_returns(df, start_date, end_date):
+    """
+    Calculate the daily returns for the TOTAL_RETURN of the given
+    DataFrame between the given dates.
+
+    :param df: Pandas DataFrame containing TOTAL_RETURN for all days.
+    :param start_date: Only use data from this date.
+    :param end_date: Only use data to this date.
+    :return: None.
+    """
+
+    # Get the Total Return for this date-range.
+    tot_ret = df[TOTAL_RETURN][start_date:end_date]
+
+    # Calculate the daily returns assuming we have daily data.
+    daily_ret = tot_ret.shift(-1) / tot_ret
+
+    return daily_ret
 
 
 ########################################################################
