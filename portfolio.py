@@ -2,6 +2,10 @@
 #
 # Classes for optimizing and allocating portfolios of stocks.
 #
+# This version is for SINGLE-OBJECTIVE optimization. It has a lot of
+# code in common with portfolio_multi.py but it is probably easier to
+# read, understand and modify the code when it is all in one file.
+#
 ########################################################################
 #
 # This file is part of FinanceOps:
@@ -39,6 +43,8 @@ class Model:
     """
     Base-class for a portfolio model providing functions for doing
     the optimization and calculating the returns from using the model.
+
+    This version is for SINGLE-OBJECTIVE optimization.
     """
 
     def __init__(self, signals_train, daily_rets_train, min_weights, max_weights):
@@ -116,6 +122,8 @@ class Model:
     def _optimize(self):
         """
         Optimize the portfolio model's parameters using SciPy.
+
+        This is the SINGLE-OBJECTIVE version that uses the DE optimizer.
 
         :return: None.
         """
@@ -257,6 +265,8 @@ class FixedWeights(Model):
     """
     Portfolio model where the stock-weights are always held fixed,
     but the best stock-weights are found through optimization.
+
+    This version is for SINGLE-OBJECTIVE optimization.
     """
 
     def __init__(self, *args, **kwargs):
@@ -298,6 +308,8 @@ class AdaptiveWeights(Model):
     using the basic function: weight = sigmoid(a * signal + b) so we want to
     find the parameters a and b that result in the best performance according
     to the fitness function in Model._fitness().
+
+    This version is for SINGLE-OBJECTIVE optimization.
     """
 
     def __init__(self, *args, **kwargs):
