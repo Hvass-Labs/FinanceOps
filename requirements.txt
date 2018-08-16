@@ -17,5 +17,6 @@ scipy
 matplotlib
 pandas
 jupyter
+pygmo       # Multi-objective optimization.
 
 ################################################################
