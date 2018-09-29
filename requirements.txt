@@ -16,7 +16,9 @@ numpy
 scipy
 matplotlib
 pandas
-jupyter
+sklearn
+notebook    # Jupyter Notebook.
+ipywidgets  # Interaction for Jupyter Notebook.
 pygmo       # Multi-objective optimization.
 
 ################################################################
