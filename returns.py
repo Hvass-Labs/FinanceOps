@@ -14,6 +14,7 @@
 #
 ########################################################################
 
+import numpy as np
 import pandas as pd
 from data_keys import *
 
@@ -141,6 +142,89 @@ def prepare_ann_returns(df, years, key=PSALES, subtract=None):
     # Retrieve the relevant data.
     x = df2[key]
     y = df2[ANN_RETURN]
+
+    return x, y
+
+
+def prepare_mean_ann_returns(df, min_years=7, max_years=15,
+                             key=PSALES):
+    """
+    Prepare mean annualized returns e.g. for making a scatter-plot.
+    The x-axis is given by the key (e.g. PSALES) and the y-axis
+    would be the mean annualized returns.
+
+    For each day we calculate the annualized returns for a whole
+    range of periods between e.g. 7 and 15 years into the future,
+    then we take the mean of all those annualized returns. This
+    smoothens the effect of random mispricing at the time of sale,
+    so it is more obvious if there is a relationship between the
+    predictive signal and future returns.
+
+    :param df:
+        Pandas DataFrame with columns named key and TOTAL_RETURN
+        both assumed to have daily interpolated data.
+    :param min_years:
+        Min number of years for return periods.
+    :param max_years:
+        Max number of years for return periods.
+    :param key:
+        Name of the data-column for x-axis e.g. PSALES or PBOOK.
+    :return:
+        (x, y) Pandas Series with key and mean ANN_RETURN_MEAN.
+    """
+
+    # The idea of this algorithm is to step through the data
+    # one day at a time. For each day we lookup an array of
+    # Total Return values in the future and calculate the
+    # annualized returns, and then take the mean of that.
+    # There is probably a faster and more clever way of
+    # implementing this, but it is fast enough for our purpose.
+
+    # Min / max number of days for the periods we consider.
+    # For example, between 7 and 15 years into the future.
+    min_days = int(min_years * 365.25)
+    max_days = int(max_years * 365.25)
+
+    # Exponent used for calculating annualized returns.
+    # Again assuming the Total Return has daily data.
+    exponent = 365.25 / np.arange(min_days, max_days)
+
+    # Select the data-columns we need.
+    df2 = df[[TOTAL_RETURN, key]]
+
+    # Drop all rows with NA.
+    # Note: This gives a strange error if we use inplace=True
+    df2 = df2.dropna(axis=0, how='any')
+
+    # Get the Total Return series.
+    tot_ret = df2[TOTAL_RETURN].values
+
+    # We will calculate mean ann. returns for this number of days.
+    # We assume that the Total Return has values for all days.
+    num_days = len(tot_ret) - max_days
+
+    # Pre-allocate array for the mean ann. returns for each day.
+    mean_ann_rets = np.zeros(num_days, dtype=np.float)
+
+    # For each day.
+    for i in range(num_days):
+        # Get the Total Return value for the i'th day.
+        tot_ret_today = tot_ret[i]
+
+        # Get array of Total Return values for future days.
+        tot_ret_future = tot_ret[i + min_days:i + max_days]
+
+        # Annualized Returns between today and those future days.
+        ann_rets = (tot_ret_future / tot_ret_today) ** exponent - 1.0
+
+        # Mean annualized returns.
+        mean_ann_rets[i] = np.mean(ann_rets)
+
+    # The predictive signal e.g. P/Sales.
+    x = df2[key][0:num_days]
+
+    # The mean annualized returns.
+    y = mean_ann_rets
 
     return x, y
 
