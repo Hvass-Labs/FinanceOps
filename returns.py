@@ -312,4 +312,28 @@ def daily_returns(df, start_date, end_date):
     return daily_ret
 
 
+def reinvestment_growth(df):
+    """
+    Estimate the growth in the Total Return from reinvestment
+    of dividends (and ignoring taxes). This is done by subtracting
+    the yearly changes in Total Return and Share-Price.
+
+    :param df: Pandas DataFrame with SHARE_PRICE and TOTAL_RETURN.
+    :return: Pandas Series with the reinvestment growth.
+    """
+
+    # Yearly percentage change in share-price. Assume the data is daily.
+    price_change = df[SHARE_PRICE].pct_change(periods=365)
+
+    # Yearly percentage change in Total Return. Assume the data is daily.
+    tot_ret_change = df[TOTAL_RETURN].pct_change(periods=365)
+
+    # The difference is the growth from reinvestment of dividends.
+    growth = tot_ret_change - price_change
+
+    # Remove empty rows.
+    growth = growth.dropna()
+
+    return growth
+
 ########################################################################

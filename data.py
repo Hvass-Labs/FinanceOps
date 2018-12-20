@@ -112,6 +112,122 @@ def _load_price_yahoo(ticker):
     return price_daily
 
 
+def _load_earnings_per_share(ticker, df, profit_margin=True):
+    """
+    Load the Earnings Per Share from a data-file and add it to the DataFrame.
+    Also calculate the P/E ratio and profit margin.
+
+    :param ticker:
+        Name of the stock used in the filenames e.g. "WMT"
+
+    :param df:
+        Pandas DataFrame with SHARE_PRICE.
+
+    :param profit_margin:
+        Boolean whether to add the profit margin to the DataFrame.
+        Requires that df already contains SALES_PER_SHARE.
+
+    :return:
+        None. Data is added to the `df` DataFrame.
+    """
+
+    # Load data.
+    path = os.path.join(data_dir, ticker + " Earnings Per Share.txt")
+    earnings_per_share = _load_data(path=path)
+
+    # Add to the DataFrame (interpolated daily).
+    df[EARNINGS_PER_SHARE] = _resample_daily(earnings_per_share)
+
+    # Add valuation ratio to the DataFrame (daily).
+    df[PE] = df[SHARE_PRICE] / df[EARNINGS_PER_SHARE]
+
+    # Add profit margin to the DataFrame (daily).
+    if profit_margin:
+        df[PROFIT_MARGIN] = df[EARNINGS_PER_SHARE] / df[SALES_PER_SHARE]
+
+
+def _load_sales_per_share(ticker, df):
+    """
+    Load the Sales Per Share from a data-file and add it to the DataFrame.
+    Also calculate the P/Sales ratio and one-year growth in Sales Per Share.
+
+    :param ticker:
+        Name of the stock used in the filenames e.g. "WMT"
+
+    :param df:
+        Pandas DataFrame with SHARE_PRICE.
+
+    :return:
+        None. Data is added to the `df` DataFrame.
+    """
+
+    # Load data.
+    path = os.path.join(data_dir, ticker + " Sales Per Share.txt")
+    sales_per_share = _load_data(path=path)
+
+    # Add to the DataFrame (interpolated daily).
+    df[SALES_PER_SHARE] = _resample_daily(sales_per_share)
+
+    # Add valuation ratio to the DataFrame (daily).
+    df[PSALES] = df[SHARE_PRICE] / df[SALES_PER_SHARE]
+
+    # Add growth to the DataFrame (daily).
+    df[SALES_GROWTH] = df[SALES_PER_SHARE].pct_change(periods=365)
+
+
+def _load_book_value_per_share(ticker, df):
+    """
+    Load the Book-Value Per Share from a data-file and add it to the DataFrame.
+    Also calculate the P/Book ratio.
+
+    :param ticker:
+        Name of the stock used in the filenames e.g. "WMT"
+
+    :param df:
+        Pandas DataFrame with SHARE_PRICE.
+
+    :return:
+        None. Data is added to the `df` DataFrame.
+    """
+
+    # Load data.
+    path = os.path.join(data_dir, ticker + " Book-Value Per Share.txt")
+    book_value_per_share = _load_data(path=path)
+
+    # Add to the DataFrame (interpolated daily).
+    df[BOOK_VALUE_PER_SHARE] = _resample_daily(book_value_per_share)
+
+    # Add valuation ratio to the DataFrame (daily).
+    df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
+
+
+def _load_dividend_TTM(ticker, df):
+    """
+    Load the Dividend Per Share TTM (Trailing Twelve Months) from a data-file and
+    add it to the DataFrame. Also calculate some related valuation ratios.
+
+    :param ticker:
+        Name of the stock-index used in the filenames e.g. "S&P 500"
+
+    :param df:
+        Pandas DataFrame with SHARE_PRICE.
+
+    :return:
+        None. Data is added to the `df` DataFrame.
+    """
+
+    # Load data.
+    path = os.path.join(data_dir, ticker + " Dividend Per Share TTM.txt")
+    dividend_per_share_TTM = _load_data(path=path)
+
+    # Add to the DataFrame (interpolated daily).
+    df[DIVIDEND_TTM] = _resample_daily(dividend_per_share_TTM)
+
+    # Add valuation ratios to the DataFrame (daily).
+    df[PDIVIDEND] = df[SHARE_PRICE] / df[DIVIDEND_TTM]
+    df[DIVIDEND_YIELD] = df[DIVIDEND_TTM] / df[SHARE_PRICE]
+
+
 ########################################################################
 # Public functions.
 
@@ -214,7 +330,7 @@ def load_index_data(ticker, sales=True, book_value=True, dividend_TTM=True):
     path = os.path.join(data_dir, ticker + " Dividend Per Share.txt")
     dividend_per_share = _load_data(path=path)
 
-    # Merge price and dividend into a single data-frame.
+    # Merge price and dividend into a single DataFrame.
     df = pd.concat([price_daily, dividend_per_share], axis=1)
 
     # Only keep the rows where the share-price is defined.
@@ -225,68 +341,49 @@ def load_index_data(ticker, sales=True, book_value=True, dividend_TTM=True):
     # for stock indices because it does not reinvest dividends.
     df[TOTAL_RETURN] = total_return(df=df)
 
+    # Load Sales Per Share data.
     if sales:
-        # Load Sales Per Share data.
-        path = os.path.join(data_dir, ticker + " Sales Per Share.txt")
-        sales_per_share = _load_data(path=path)
+        _load_sales_per_share(ticker=ticker, df=df)
 
-        # Add to the data-frame (interpolated daily).
-        df[SALES_PER_SHARE] = _resample_daily(sales_per_share)
-
-        # Add P/Sales ratio to the data-frame (daily).
-        df[PSALES] = df[SHARE_PRICE] / df[SALES_PER_SHARE]
-
+    # Load Book-Value Per Share data.
     if book_value:
-        # Load Book-Value Per Share data.
-        path = os.path.join(data_dir, ticker + " Book-Value Per Share.txt")
-        book_value_per_share = _load_data(path=path)
+        _load_book_value_per_share(ticker=ticker, df=df)
 
-        # Add to the data-frame (interpolated daily).
-        df[BOOK_VALUE_PER_SHARE] = _resample_daily(book_value_per_share)
-
-        # Add P/Book to the data-frame (daily).
-        df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
-
+    # Load Dividend Per Share TTM data.
     if dividend_TTM:
-        # Load Dividend Per Share TTM data.
-        path = os.path.join(data_dir, ticker + " Dividend Per Share TTM.txt")
-        dividend_per_share_TTM = _load_data(path=path)
-
-        # Add to the data-frame (interpolated daily).
-        df[DIVIDEND_TTM] = _resample_daily(dividend_per_share_TTM)
-
-        # Add Dividend Yield to the data-frame (daily).
-        df[DIVIDEND_YIELD] = df[DIVIDEND_TTM] / df[SHARE_PRICE]
-
-        # Add P/Dividend to the data-frame (daily).
-        df[PDIVIDEND] = df[SHARE_PRICE] / df[DIVIDEND_TTM]
+        _load_dividend_TTM(ticker=ticker, df=df)
 
     return df
 
 
-def load_stock_data(ticker):
+def load_stock_data(ticker, earnings=True, sales=True, book_value=True):
     """
     Load data for a single stock from several different files
     and combine them into a single Pandas DataFrame.
 
     - Price is loaded from a Yahoo-file.
-    - Sales Per Share and Book-Value Per Share are loaded from separate files.
+    - Other data is loaded from separate files.
 
     The Total Return is taken directly from the Yahoo price-data.
-    The P/Sales and P/Book ratios are calculated daily.
+    Valuation ratios such as P/E and P/Sales are calculated daily
+    from interpolated data.
 
     :param ticker:
         Name of the stock used in the filenames e.g. "WMT"
+
+    :param earnings:
+        Boolean whether to load data-file for Earnings Per Share.
+
+    :param sales:
+        Boolean whether to load data-file for Sales Per Share.
+
+    :param book_value:
+        Boolean whether to load data-file for Book-Value Per Share.
+
     :return: Pandas DataFrame with the data.
     """
-    # Paths for the data-files.
-    path_sales_per_share = os.path.join(data_dir, ticker + " Sales Per Share.txt")
-    path_book_value_per_share = os.path.join(data_dir, ticker + " Book-Value Per Share.txt")
-
     # Load the data-files.
     price_daily = _load_price_yahoo(ticker=ticker)
-    sales_per_share = _load_data(path=path_sales_per_share)
-    book_value_per_share = _load_data(path=path_book_value_per_share)
 
     # Use the DataFrame for the price and add more data-columns to it.
     df = price_daily
@@ -294,13 +391,18 @@ def load_stock_data(ticker):
     # Only keep the rows where the share-price is defined.
     df.dropna(subset=[SHARE_PRICE], inplace=True)
 
-    # Add financial data to the data-frame (interpolated daily).
-    df[SALES_PER_SHARE] = _resample_daily(sales_per_share)
-    df[BOOK_VALUE_PER_SHARE] = _resample_daily(book_value_per_share)
+    # Load Sales Per Share data.
+    if sales:
+        _load_sales_per_share(ticker=ticker, df=df)
 
-    # Add financial ratios to the data-frame (daily).
-    df[PSALES] = df[SHARE_PRICE] / df[SALES_PER_SHARE]
-    df[PBOOK] = df[SHARE_PRICE] / df[BOOK_VALUE_PER_SHARE]
+    # Load Earnings Per Share data.
+    # This needs the Sales Per Share data to calculate the profit margin.
+    if earnings:
+        _load_earnings_per_share(ticker=ticker, df=df)
+
+    # Load Book-Value Per Share data.
+    if book_value:
+        _load_book_value_per_share(ticker=ticker, df=df)
 
     return df
 
