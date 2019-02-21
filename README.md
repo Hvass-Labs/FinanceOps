@@ -20,6 +20,8 @@ modified and run again.
 
 1-C. Theory of Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01C_Theory_of_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01C_Theory_of_Long-Term_Stock_Forecasting.ipynb))
 
+1-D. Testing the Stock Forecasting Model ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01D_Testing_the_Stock_Forecasting_Model.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01D_Testing_the_Stock_Forecasting_Model.ipynb))
+
 2. Comparing Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb))
 
 3. Portfolio Optimization Using Signals ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb))
