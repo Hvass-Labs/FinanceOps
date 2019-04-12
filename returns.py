@@ -312,13 +312,18 @@ def daily_returns(df, start_date, end_date):
     return daily_ret
 
 
-def reinvestment_growth(df):
+def reinvestment_growth(df, smooth=True):
     """
     Estimate the growth in the Total Return from reinvestment
     of dividends (and ignoring taxes). This is done by subtracting
     the yearly changes in Total Return and Share-Price.
 
+    The resulting growth-rates are quite erratic, possibly
+    because of slight changes in the dividend-dates. This
+    can be smoothed by a moving average.
+
     :param df: Pandas DataFrame with SHARE_PRICE and TOTAL_RETURN.
+    :param smooth: Boolean whether to smooth the growth-rates.
     :return: Pandas Series with the reinvestment growth.
     """
 
@@ -330,6 +335,10 @@ def reinvestment_growth(df):
 
     # The difference is the growth from reinvestment of dividends.
     growth = tot_ret_change - price_change
+
+    # Smoothen the growth-rates using moving average?
+    if smooth:
+        growth = growth.rolling(window=20).mean()
 
     # Remove empty rows.
     growth = growth.dropna()
