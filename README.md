@@ -24,6 +24,8 @@ modified and run again.
 
 1-E. Forecasting U.S. Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01E_Forecasting_US_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01E_Forecasting_US_Stock_Indices.ipynb))
 
+1-F. Forecasting International Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01F_Forecasting_Int_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01F_Forecasting_Int_Stock_Indices.ipynb))
+
 2. Comparing Stock Indices ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/02_Comparing_Stock_Indices.ipynb))
 
 3. Portfolio Optimization Using Signals ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/03_Portfolio_Optimization_Using_Signals.ipynb))
