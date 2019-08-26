@@ -90,12 +90,12 @@ your Google account.
 Then you need to execute the following commands at the top of the Notebook,
 which clones FinanceOps to your work-directory on Colab.
 
+    # Clone the repository from GitHub to Google Colab's temporary drive.
     import os
     work_dir = "/content/FinanceOps/"
-    if os.getcwd() != work_dir:
+    if not os.path.exists(work_dir):
         !git clone https://github.com/Hvass-Labs/FinanceOps.git
     os.chdir(work_dir)
-
 
 ## Data Sources
 
