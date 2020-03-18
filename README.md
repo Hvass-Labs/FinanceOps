@@ -34,6 +34,8 @@ modified and run again.
 
 4. Multi-Objective Portfolio Optimization ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/04_Multi-Objective_Portfolio_Optimization.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/04_Multi-Objective_Portfolio_Optimization.ipynb))
 
+5. Forecasting the P/Sales Ratio ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/05_Forecasting_PSales_Ratio.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/05_Forecasting_PSales_Ratio.ipynb))
+
 
 ## Videos
 
@@ -97,10 +99,12 @@ which clones FinanceOps to your work-directory on Colab.
         !git clone https://github.com/Hvass-Labs/FinanceOps.git
     os.chdir(work_dir)
 
+
 ## Data Sources
 
-- Price data from [Yahoo Finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC).
-- Financial data for individual stocks collected manually by the author from the 10-K Forms filed with the [U.S. SEC](http://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=jnj&filenum=&State=&Country=&SIC=&owner=exclude&Find=Find+Companies&action=getcompany).
+- Recent share-price and fundamental data from [SimFin](https://github.com/SimFin/simfin).
+- Older share-price data from [Yahoo Finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC).
+- Financial data for some individual stocks collected manually by the author from the 10-K Forms filed with the [U.S. SEC](http://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=jnj&filenum=&State=&Country=&SIC=&owner=exclude&Find=Find+Companies&action=getcompany).
 - Newer S&P 500 data from the [S&P Earnings & Estimates Report](http://www.spindices.com/documents/additional-material/sp-500-eps-est.xlsx) and older data from the research staff at S&P and Compustat (some older data is approximated by their research staff).
 - Financial data for Exchange Traded Funds (ETF) from Morningstar Direct.
 - U.S. Government Bond yield for 1-year constant maturity. From the [U.S. Federal Reserve](https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15).

@@ -20,5 +20,7 @@ sklearn
 notebook    # Jupyter Notebook.
 ipywidgets  # Interaction for Jupyter Notebook.
 pygmo       # Multi-objective optimization.
+statsmodels # Statistical modelling.
+simfin      # Financial database.
 
 ################################################################
