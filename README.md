@@ -38,6 +38,8 @@ modified and run again.
 
 6. Forecasting Sales Growth ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb))
 
+7. Forecasting Dividends ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/07_Forecasting_Dividends.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/07_Forecasting_Dividends.ipynb))
+
 
 ## Videos
 
