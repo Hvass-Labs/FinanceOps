@@ -36,6 +36,8 @@ modified and run again.
 
 5. Forecasting the P/Sales Ratio ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/05_Forecasting_PSales_Ratio.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/05_Forecasting_PSales_Ratio.ipynb))
 
+6. Forecasting Sales Growth ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb))
+
 
 ## Videos
 
