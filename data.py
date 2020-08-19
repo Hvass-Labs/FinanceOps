@@ -356,7 +356,8 @@ def load_index_data(ticker, sales=True, book_value=True, dividend_TTM=True):
     return df
 
 
-def load_stock_data(ticker, earnings=True, sales=True, book_value=True):
+def load_stock_data(ticker, earnings=True, sales=True, book_value=True,
+                    dividend_TTM=False):
     """
     Load data for a single stock from several different files
     and combine them into a single Pandas DataFrame.
@@ -379,6 +380,9 @@ def load_stock_data(ticker, earnings=True, sales=True, book_value=True):
 
     :param book_value:
         Boolean whether to load data-file for Book-Value Per Share.
+
+    :param dividend_TTM:
+        Boolean whether to load data-file for Dividend Per Share TTM.
 
     :return: Pandas DataFrame with the data.
     """
@@ -403,6 +407,10 @@ def load_stock_data(ticker, earnings=True, sales=True, book_value=True):
     # Load Book-Value Per Share data.
     if book_value:
         _load_book_value_per_share(ticker=ticker, df=df)
+
+    # Load Dividend Per Share TTM data.
+    if dividend_TTM:
+        _load_dividend_TTM(ticker=ticker, df=df)
 
     return df
 

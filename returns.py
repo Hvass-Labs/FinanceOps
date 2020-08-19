@@ -345,4 +345,16 @@ def reinvestment_growth(df, smooth=True):
 
     return growth
 
+
+def dividend_yield(df):
+    """
+    Calculate the daily Dividend Yield of a stock, as the forward-filled
+    TTM Dividend divided by the daily Share-Price.
+
+    :param df: Pandas DataFrame with SHARE_PRICE and DIVIDEND_TTM.
+    :return: Pandas Series with the data.
+    """
+
+    return (df[DIVIDEND_TTM].ffill() / df[SHARE_PRICE]).rename(DIVIDEND_YIELD)
+
 ########################################################################
