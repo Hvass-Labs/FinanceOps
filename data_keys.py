@@ -14,6 +14,8 @@
 #
 ########################################################################
 
+DATE = 'Date'
+
 TOTAL_RETURN = 'Total Return'
 SHARE_PRICE = 'Share-price'
 
