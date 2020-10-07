@@ -36,6 +36,7 @@ PBOOK = "P/Book"
 PDIVIDEND = "P/Dividend"
 
 ANN_RETURN = "Annualized Return"
+MEAN_ANN_RETURN = "Mean Ann. Return"
 BOND_YIELD = "Bond Yield"
 CPI = "CPI"
 

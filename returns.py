@@ -16,6 +16,7 @@
 
 import numpy as np
 import pandas as pd
+import data
 from data_keys import *
 
 ########################################################################
@@ -189,19 +190,20 @@ def prepare_mean_ann_returns(df, min_years=7, max_years=15,
     # Again assuming the Total Return has daily data.
     exponent = 365.25 / np.arange(min_days, max_days)
 
-    # Select the data-columns we need.
-    df2 = df[[TOTAL_RETURN, key]]
+    # Get the common start-dates for the data-columns.
+    dfs = [df[TOTAL_RETURN].dropna(), df[key].dropna()]
+    start_date, _ = data.common_period(dfs=dfs)
 
-    # Drop all rows with NA.
-    # Note: This gives a strange error if we use inplace=True
-    df2 = df2.dropna(axis=0, how='any')
-
-    # Get the Total Return series.
-    tot_ret = df2[TOTAL_RETURN].values
+    # Get the individual data-columns from their common start-dates.
+    # NOTE: We use dropna() on them individually so as to keep as much
+    # data as possible when calculating the mean ann. returns.
+    # This means we have to sync the array-lengths further below.
+    df_key = df[key][start_date:].dropna()
+    df_tot_ret = df[TOTAL_RETURN][start_date:].dropna()
 
     # We will calculate mean ann. returns for this number of days.
     # We assume that the Total Return has values for all days.
-    num_days = len(tot_ret) - max_days
+    num_days = len(df_tot_ret) - max_days
 
     # Pre-allocate array for the mean ann. returns for each day.
     mean_ann_rets = np.zeros(num_days, dtype=np.float)
@@ -209,10 +211,10 @@ def prepare_mean_ann_returns(df, min_years=7, max_years=15,
     # For each day.
     for i in range(num_days):
         # Get the Total Return value for the i'th day.
-        tot_ret_today = tot_ret[i]
+        tot_ret_today = df_tot_ret[i]
 
         # Get array of Total Return values for future days.
-        tot_ret_future = tot_ret[i + min_days:i + max_days]
+        tot_ret_future = df_tot_ret[i + min_days:i + max_days]
 
         # Annualized Returns between today and those future days.
         ann_rets = (tot_ret_future / tot_ret_today) ** exponent - 1.0
@@ -220,11 +222,16 @@ def prepare_mean_ann_returns(df, min_years=7, max_years=15,
         # Mean annualized returns.
         mean_ann_rets[i] = np.mean(ann_rets)
 
+    # Common length for the two arrays.
+    common_len = min(num_days, len(df_key))
+
     # The predictive signal e.g. P/Sales.
-    x = df2[key][0:num_days]
+    x = df_key[0:common_len]
 
     # The mean annualized returns.
-    y = mean_ann_rets
+    y = mean_ann_rets[0:common_len]
+    # Convert the numpy array into a Pandas Series.
+    y = pd.Series(data=y, index=x.index, name=MEAN_ANN_RETURN)
 
     return x, y
 
