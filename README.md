@@ -112,7 +112,9 @@ which clones FinanceOps to your work-directory on Colab.
 - Newer S&P 500 data from the [S&P Earnings & Estimates Report](http://www.spindices.com/documents/additional-material/sp-500-eps-est.xlsx) and older data from the research staff at S&P and Compustat (some older data is approximated by their research staff).
 - Financial data for Exchange Traded Funds (ETF) from Morningstar Direct.
 - U.S. Government Bond yield for 1-year constant maturity. From the [U.S. Federal Reserve](https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15).
-- The inflation index is: All Items Consumer Price Index for All Urban Consumers (CPI-U), U.S. City Average. From the [US Department of Labor, Bureau of Labor Statistics](http://www.bls.gov/cpi/data.htm).
+- The inflation index is: All Items Consumer Price Index for All Urban Consumers (CPI-U), U.S. City Average.
+  [Data](https://beta.bls.gov/dataQuery/find?fq=survey:%5Bcu%5D&s=popularity:D&q=CUUR0000SA0)
+  from the [US Department of Labor, Bureau of Labor Statistics](http://www.bls.gov/cpi/data.htm).
 
 
 ## License (MIT)
