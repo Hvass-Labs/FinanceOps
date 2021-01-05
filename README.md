@@ -48,7 +48,7 @@ The following Python Notebooks produce the plots and statistics for some of my
 [SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
 and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 
-- Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/07_Forecasting_Dividends.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+- Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
 
 
 ## Videos
