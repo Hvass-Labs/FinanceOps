@@ -37,6 +37,7 @@ PDIVIDEND = "P/Dividend"
 
 ANN_RETURN = "Annualized Return"
 MEAN_ANN_RETURN = "Mean Ann. Return"
+STD_ANN_RETURN = "Std. Ann. Return"
 BOND_YIELD = "Bond Yield"
 CPI = "CPI"
 

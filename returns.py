@@ -16,8 +16,19 @@
 
 import numpy as np
 import pandas as pd
+from numba import jit
 import data
 from data_keys import *
+
+########################################################################
+# Constants.
+
+# Average number of days in a year. Normal years have 365 days,
+# but every 4th year is a leap-year with 366 days.
+DAYS_PER_YEAR = 365.25
+
+# Average number of business- or trading-days in a year.
+BDAYS_PER_YEAR = 251.67
 
 ########################################################################
 # Public functions.
@@ -147,8 +158,103 @@ def prepare_ann_returns(df, years, key=PSALES, subtract=None):
     return x, y
 
 
-def prepare_mean_ann_returns(df, min_years=7, max_years=15,
-                             key=PSALES):
+@jit(forceobj=True)
+def mean_std_ann_returns(series, min_years=7, max_years=15,
+                         days_per_year=DAYS_PER_YEAR):
+    """
+    Calculate mean and std.dev. annualized returns for a range
+    of investment periods.
+
+    For each day we calculate the annualized returns for a whole
+    range of periods between e.g. 7 and 15 years into the future,
+    then we take the mean and std.dev. of all those annualized
+    returns. This smoothens the effect of random mispricing at
+    the time of sale, so it is more obvious if there is a
+    relationship between a predictive signal and future returns.
+
+    This function uses "Numba jit" so the for-loop is compiled
+    into machine-code which gives a 10x speed increase after the
+    function has been called once.
+
+    Note the use of jit with "forceobj=True" which allows for a mix
+    of ordinary Python and optimized code, which makes the code easier
+    to read. The fastest jit-mode is actually "fallback" which is about
+    twice as fast, but it generates several warnings and will be
+    deprecated in the future. The slowest mode is "nopython=True" where
+    the for-loop is made inside a nested function that is fully
+    compatible with Numba jit, but that is actually twice as slow as
+    "forceobj=True" in this case. So this is the best compromise and
+    still gives a 10x speed-up.
+
+    :param series:
+        Pandas Series with e.g. the Total Return of a stock.
+    :param min_years:
+        Min number of years for investment periods.
+    :param max_years:
+        Max number of years for investment periods.
+    :param days_per_year:
+        Number of days in a year for the data in `series`. Use one of these:
+        - DAYS_PER_YEAR for daily interpolated data with leap-years.
+        - BDAYS_PER_YEAR for the average number of trading-days per year.
+    :return:
+        Pandas DataFrame where each day has the mean and std.dev. for the
+        annualized returns of the future investment periods starting
+        that day and for all periods between `min_year` and `max_year`.
+    """
+
+    # The idea of this algorithm is to step through the data
+    # one day at a time. For each day we lookup an array of
+    # e.g. Total Return values in the future and calculate the
+    # annualized returns, and then take the mean and std.dev.
+    # of that. There may be a faster and more clever way of
+    # implementing this, but it is fast enough for our purposes
+    # when using Numba jit to speed-up the for-loop.
+
+    # Min / max number of days for the periods we consider.
+    # For example, between 7 and 15 years into the future.
+    min_days = int(min_years * days_per_year)
+    max_days = int(max_years * days_per_year)
+
+    # Exponent used for calculating annualized returns.
+    exponent = days_per_year / np.arange(min_days, max_days)
+
+    # Number of days in the output arrays.
+    num_days = len(series) - max_days
+
+    # Pre-allocate output arrays for the mean and std.dev. ann. returns.
+    mean_ann_rets = np.zeros(num_days, dtype=np.float)
+    std_ann_rets = np.zeros(num_days, dtype=np.float)
+
+    # Convert the Pandas Series into a numpy array
+    # which is supported by the numba jit compiler.
+    values = series.to_numpy()
+
+    # For each day do the following.
+    # Note: This for-loop will be optimized by the numba jit compiler.
+    for i in range(num_days):
+        # Get the Total Return value for the i'th day.
+        tot_ret_today = values[i]
+
+        # Get array of Total Return values for future days.
+        tot_ret_future = values[i + min_days:i + max_days]
+
+        # Annualized Returns between today and those future days.
+        ann_rets = (tot_ret_future / tot_ret_today) ** exponent - 1.0
+
+        # Mean annualized returns.
+        mean_ann_rets[i] = np.mean(ann_rets)
+
+        # Standard deviation for the annualized returns.
+        std_ann_rets[i] = np.std(ann_rets)
+
+    # Create a Pandas DataFrame with the result.
+    data = {MEAN_ANN_RETURN: mean_ann_rets, STD_ANN_RETURN: std_ann_rets}
+    df_result = pd.DataFrame(data=data, index=series.index[0:num_days])
+
+    return df_result
+
+
+def prepare_mean_ann_returns(df, min_years=7, max_years=15, key=PSALES):
     """
     Prepare mean annualized returns e.g. for making a scatter-plot.
     The x-axis is given by the key (e.g. PSALES) and the y-axis
@@ -165,30 +271,14 @@ def prepare_mean_ann_returns(df, min_years=7, max_years=15,
         Pandas DataFrame with columns named key and TOTAL_RETURN
         both assumed to have daily interpolated data.
     :param min_years:
-        Min number of years for return periods.
+        Min number of years for investment periods.
     :param max_years:
-        Max number of years for return periods.
+        Max number of years for investment periods.
     :param key:
         Name of the data-column for x-axis e.g. PSALES or PBOOK.
     :return:
         (x, y) Pandas Series with key and mean ANN_RETURN_MEAN.
     """
-
-    # The idea of this algorithm is to step through the data
-    # one day at a time. For each day we lookup an array of
-    # Total Return values in the future and calculate the
-    # annualized returns, and then take the mean of that.
-    # There is probably a faster and more clever way of
-    # implementing this, but it is fast enough for our purpose.
-
-    # Min / max number of days for the periods we consider.
-    # For example, between 7 and 15 years into the future.
-    min_days = int(min_years * 365.25)
-    max_days = int(max_years * 365.25)
-
-    # Exponent used for calculating annualized returns.
-    # Again assuming the Total Return has daily data.
-    exponent = 365.25 / np.arange(min_days, max_days)
 
     # Get the common start-dates for the data-columns.
     dfs = [df[TOTAL_RETURN].dropna(), df[key].dropna()]
@@ -201,37 +291,21 @@ def prepare_mean_ann_returns(df, min_years=7, max_years=15,
     df_key = df[key][start_date:].dropna()
     df_tot_ret = df[TOTAL_RETURN][start_date:].dropna()
 
-    # We will calculate mean ann. returns for this number of days.
-    # We assume that the Total Return has values for all days.
-    num_days = len(df_tot_ret) - max_days
-
-    # Pre-allocate array for the mean ann. returns for each day.
-    mean_ann_rets = np.zeros(num_days, dtype=np.float)
-
-    # For each day.
-    for i in range(num_days):
-        # Get the Total Return value for the i'th day.
-        tot_ret_today = df_tot_ret[i]
-
-        # Get array of Total Return values for future days.
-        tot_ret_future = df_tot_ret[i + min_days:i + max_days]
-
-        # Annualized Returns between today and those future days.
-        ann_rets = (tot_ret_future / tot_ret_today) ** exponent - 1.0
-
-        # Mean annualized returns.
-        mean_ann_rets[i] = np.mean(ann_rets)
+    # Calculate both the mean and std.dev. ann. returns.
+    # Assume the Total Return has daily interpolated data.
+    df_mean_ann_rets = mean_std_ann_returns(series=df_tot_ret,
+                                            min_years=min_years,
+                                            max_years=max_years,
+                                            days_per_year=DAYS_PER_YEAR)
 
     # Common length for the two arrays.
-    common_len = min(num_days, len(df_key))
+    common_len = min(len(df_mean_ann_rets), len(df_key))
 
     # The predictive signal e.g. P/Sales.
     x = df_key[0:common_len]
 
     # The mean annualized returns.
-    y = mean_ann_rets[0:common_len]
-    # Convert the numpy array into a Pandas Series.
-    y = pd.Series(data=y, index=x.index, name=MEAN_ANN_RETURN)
+    y = df_mean_ann_rets[MEAN_ANN_RETURN].iloc[0:common_len]
 
     return x, y
 
