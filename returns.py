@@ -62,7 +62,7 @@ def total_return(df):
     tot_ret = tot_ret_daily.cumprod()
 
     # Replace the first row's NA with 1.0
-    tot_ret.values[0] = 1.0
+    tot_ret.iloc[0] = 1.0
 
     return tot_ret
 

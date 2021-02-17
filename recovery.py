@@ -51,7 +51,7 @@ def recovery_days(tot_ret):
     # For each element in the Total Return time-series.
     for cur_idx in range(len(tot_ret)):
         # Value of the current element in the time-series.
-        cur_val = tot_ret.values[cur_idx]
+        cur_val = tot_ret.iloc[cur_idx]
 
         # Remove all previous elements from the stack whose value
         # is less than the current element from the time-series.
