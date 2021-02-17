@@ -131,17 +131,15 @@ def prepare_ann_returns(df, years, key=PSALES, subtract=None):
 
     # Calculate all annualized returns for all periods of
     # the given number of years using the Total Return.
-    ann_return = annualized_returns(series=df[TOTAL_RETURN],
-                                    years=years)
+    ann_return = annualized_returns(series=df[TOTAL_RETURN], years=years)
 
     if subtract is None:
         # Add the ann-returns to the new data-frame.
         df2[ANN_RETURN] = ann_return
     else:
-        # Calculate all annaulized returns for the series
+        # Calculate all annualized returns for the series
         # that must be subtracted e.g. sales-per-share.
-        ann_return_subtract = annualized_returns(series=subtract,
-                                                 years=years)
+        ann_return_subtract = annualized_returns(series=subtract, years=years)
 
         # Subtract the ann. returns for the total return
         # and the adjustment (e.g. sales-per-share).
