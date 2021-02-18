@@ -213,6 +213,12 @@ def mean_std_ann_returns(series, min_years=7, max_years=15,
     min_days = int(min_years * days_per_year)
     max_days = int(max_years * days_per_year)
 
+    # Ensure series is long enough.
+    if len(series) < max_days:
+        msg = 'len(series)={0} is too short for max_days={1}'
+        msg = msg.format(len(series), max_days)
+        raise ValueError(msg)
+
     # Exponent used for calculating annualized returns.
     exponent = days_per_year / np.arange(min_days, max_days)
 
