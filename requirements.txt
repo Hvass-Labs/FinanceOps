@@ -17,6 +17,7 @@ scipy
 matplotlib
 pandas
 sklearn
+requests    # Download from the internet.
 notebook    # Jupyter Notebook.
 ipywidgets  # Interaction for Jupyter Notebook.
 pygmo       # Multi-objective optimization.

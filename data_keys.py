@@ -15,9 +15,16 @@
 ########################################################################
 
 DATE = 'Date'
+DATE_TIME = 'Date and Time'
 
 TOTAL_RETURN = 'Total Return'
 SHARE_PRICE = 'Share-price'
+
+OPEN = 'Open'
+HIGH = 'High'
+LOW = 'Low'
+CLOSE = 'Close'
+VOLUME = 'Volume'
 
 DIVIDEND = 'Dividend'
 DIVIDEND_TTM = 'Dividend TTM'

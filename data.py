@@ -24,6 +24,7 @@
 import pandas as pd
 import numpy as np
 import os
+import requests
 from data_keys import *
 from returns import total_return
 
@@ -432,6 +433,139 @@ def common_period(dfs):
     common_end_date = np.min(end_dates)
 
     return common_start_date, common_end_date
+
+
+########################################################################
+# Download and load data from Alpha Vantage www.alphavantage.co
+
+# API key for Alpha Vantage.
+_api_key_av = None
+
+
+def set_api_key_av(api_key):
+    """
+    Set the API key for Alpha Vantage.
+
+    :param api_key: String with the API key.
+    :return: `None`
+    """
+    global _api_key_av
+    _api_key_av = api_key
+
+
+def load_api_key_av(path='~/alphavantage_api_key.txt'):
+    """
+    Load the API key for Alpha Vantage from the text-file with the given path.
+
+    :param path: String with the path for the text-file.
+    :return: `None`
+    """
+    # Expand the path if it begins with ~ for the user's home-dir.
+    path = os.path.expanduser(path)
+
+    # Read the first line from the file.
+    with open(path) as f:
+        key = f.readline().strip()
+
+    # Set the API key for later use.
+    set_api_key_av(api_key=key)
+
+
+def _path_shareprices_intraday(ticker, interval):
+    """
+    Return the path for the CSV data-file with intra-day share-prices for the
+    given stock-ticker and interval.
+
+    :param ticker:
+        String with the stock-ticker.
+
+    :param interval:
+        String with the data-interval: '1min', '5min', '15min', '30min', '60min'
+
+    :return:
+        String with the path for the CSV data-file.
+    """
+
+    # Filename and path for the data-file.
+    filename = f'{ticker} Share-Price Intraday {interval} (AlphaVantage).csv'
+    path = os.path.join(data_dir, 'intraday', filename)
+
+    return path
+
+
+def download_shareprices_intraday(ticker, interval):
+    """
+    Download intraday share-prices in CSV format from Alpha Vantage
+    and save them as a CSV-file in the data-directory.
+
+    :param ticker:
+        String with the stock-ticker.
+
+    :param interval:
+        String with the data-interval: '1min', '5min', '15min', '30min', '60min'
+
+    :return:
+        `None`
+    """
+
+    assert _api_key_av is not None, 'You need to set an API key for Alpha Vantage'
+
+    # URL for the CSV-data.
+    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&adjusted=True&outputsize=full&datatype=csv&apikey={_api_key_av}"
+
+    # Path where the data-file should be saved.
+    path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+
+    # Check if the data-directory exists, otherwise create it.
+    dir_name = os.path.dirname(path)
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    # Open a connection to the web-server.
+    response = requests.get(url)
+
+    # If connection is OK then download the contents.
+    if response.status_code == 200:
+        # Create local file and copy data from the server.
+        with open(path, 'wb') as file:
+            file.write(response.content)
+    else:
+        # An error occurred so raise the error as an exception.
+        response.raise_for_status()
+
+
+def load_shareprices_intraday(ticker, interval):
+    """
+    Load intraday share-prices from a CSV-file in the data-directory.
+
+    :param ticker:
+        String with the stock-ticker.
+
+    :param interval:
+        String with the data-interval: '1min', '5min', '15min', '30min', '60min'
+
+    :return:
+        Pandas DataFrame with the data.
+    """
+    # Path for the CSV data-file.
+    path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+
+    # Load CSV-file and set the correct index-column.
+    df = pd.read_csv(path, sep=',', index_col='timestamp', parse_dates=True)
+
+    # Rename index and columns.
+    df.index.name = DATE_TIME
+    new_names_map = \
+        {
+            'open': OPEN,
+            'close': CLOSE,
+            'high': HIGH,
+            'low': LOW,
+            'volume': VOLUME
+        }
+    df.rename(columns=new_names_map, inplace=True)
+
+    return df
 
 
 ########################################################################
