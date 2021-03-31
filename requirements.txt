@@ -12,11 +12,12 @@
 #
 ################################################################
 
-numpy
-scipy
-matplotlib
-pandas
-sklearn
+numpy       # Array-based computing.
+scipy       # Scientific computing.
+pandas      # Time-series computing.
+matplotlib  # Basic plotting.
+seaborn     # Extra plotting functions.
+sklearn     # Machine Learning.
 requests    # Download from the internet.
 notebook    # Jupyter Notebook.
 ipywidgets  # Interaction for Jupyter Notebook.
