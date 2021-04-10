@@ -23,6 +23,7 @@
 
 import pandas as pd
 import numpy as np
+import time
 import os
 import requests
 from data_keys import *
@@ -31,7 +32,10 @@ from returns import total_return
 ########################################################################
 
 # Data-directory. Set this before calling any of the load-functions.
-data_dir = "data/"
+data_dir = 'data/'
+
+# Data-directory for intraday share-prices.
+data_dir_intraday = os.path.join(data_dir, 'intraday/')
 
 ########################################################################
 # Private helper-functions.
@@ -488,21 +492,25 @@ def _path_shareprices_intraday(ticker, interval):
 
     # Filename and path for the data-file.
     filename = f'{ticker} Share-Price Intraday {interval} (AlphaVantage).csv'
-    path = os.path.join(data_dir, 'intraday', filename)
+    path = os.path.join(data_dir_intraday, filename)
 
     return path
 
 
-def download_shareprices_intraday(ticker, interval):
+def download_shareprices_intraday(tickers, interval, sleep=True):
     """
     Download intraday share-prices in CSV format from Alpha Vantage
-    and save them as a CSV-file in the data-directory.
+    and save them as CSV-files in the data-directory.
 
-    :param ticker:
-        String with the stock-ticker.
+    :param tickers:
+        List of strings with stock-tickers, or just a single string.
 
     :param interval:
         String with the data-interval: '1min', '5min', '15min', '30min', '60min'
+
+    :param sleep:
+        Boolean whether to sleep after downloading data for each stock.
+        AlphaVantage only allows 5 API calls per minute for free accounts.
 
     :return:
         `None`
@@ -510,60 +518,106 @@ def download_shareprices_intraday(ticker, interval):
 
     assert _api_key_av is not None, 'You need to set an API key for Alpha Vantage'
 
-    # URL for the CSV-data.
-    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&adjusted=True&outputsize=full&datatype=csv&apikey={_api_key_av}"
+    # If there is only a single ticker, convert it to a list.
+    if not isinstance(tickers, list):
+        tickers = [tickers]
 
-    # Path where the data-file should be saved.
-    path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+    # Number of tickers.
+    num_tickers = len(tickers)
 
     # Check if the data-directory exists, otherwise create it.
-    dir_name = os.path.dirname(path)
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
+    if not os.path.exists(data_dir_intraday):
+        os.makedirs(data_dir_intraday)
 
-    # Open a connection to the web-server.
-    response = requests.get(url)
+    # For all tickers.
+    for i, ticker in enumerate(tickers):
+        # Print status.
+        msg = f'- Downloading {interval} share-prices for {ticker} ... '
+        print(msg, end='')
 
-    # If connection is OK then download the contents.
-    if response.status_code == 200:
-        # Create local file and copy data from the server.
-        with open(path, 'wb') as file:
-            file.write(response.content)
-    else:
-        # An error occurred so raise the error as an exception.
-        response.raise_for_status()
+        # Internet URL for the CSV-data.
+        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={interval}&adjusted=True&outputsize=full&datatype=csv&apikey={_api_key_av}"
+
+        # Path where the data-file should be saved.
+        path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+
+        # Open a connection to the web-server.
+        response = requests.get(url)
+
+        # If connection is OK then download the contents.
+        if response.status_code == 200:
+            # Create local file and copy data from the server.
+            with open(path, 'wb') as file:
+                file.write(response.content)
+
+            # Print status.
+            print('Done!')
+        else:
+            # An error occurred so print the status-code.
+            print(f'Error {response.status_code}')
+
+        # The free Alpha Vantage accounts only allow 5 API calls per minute.
+        # We could measure the time more accurately, but this sleep should
+        # be sufficient. There is no need to sleep after the last ticker.
+        if sleep and i < num_tickers - 1:
+            time.sleep(13)
 
 
-def load_shareprices_intraday(ticker, interval):
+def load_shareprices_intraday(tickers, interval):
     """
-    Load intraday share-prices from a CSV-file in the data-directory.
+    Load intraday share-prices from CSV-files in the data-directory.
 
-    :param ticker:
-        String with the stock-ticker.
+    The returned DataFrame has a MultiIndex so each row is indexed by both
+    a ticker and a time-stamp. This is because there may be different
+    time-stamps available for each ticker. You can convert it to a DataFrame
+    where the columns are tickers. For example, to get the CLOSE values from
+    the returned DataFrame `df` we would call: `df[CLOSE].unstack().T`
+
+    :param tickers:
+        List of strings with stock-tickers, or just a single string.
 
     :param interval:
         String with the data-interval: '1min', '5min', '15min', '30min', '60min'
 
     :return:
-        Pandas DataFrame with the data.
+        Pandas DataFrame.
     """
-    # Path for the CSV data-file.
-    path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+    # If there is only a single ticker, convert it to a list.
+    if not isinstance(tickers, list):
+        tickers = [tickers]
 
-    # Load CSV-file and set the correct index-column.
-    df = pd.read_csv(path, sep=',', index_col='timestamp', parse_dates=True)
+    # Dictionary with the resulting DataFrames for each ticker.
+    df_dict = {}
 
-    # Rename index and columns.
-    df.index.name = DATE_TIME
-    new_names_map = \
-        {
-            'open': OPEN,
-            'close': CLOSE,
-            'high': HIGH,
-            'low': LOW,
-            'volume': VOLUME
-        }
-    df.rename(columns=new_names_map, inplace=True)
+    # For all tickers.
+    for ticker in tickers:
+        try:
+            # Path for the CSV data-file.
+            path = _path_shareprices_intraday(ticker=ticker, interval=interval)
+
+            # Load CSV-file and set the correct index-column.
+            df = pd.read_csv(path, sep=',', index_col='timestamp', parse_dates=True)
+
+            # Rename index and columns.
+            df.index.name = DATE_TIME
+            new_names_map = \
+                {
+                    'open': OPEN,
+                    'close': CLOSE,
+                    'high': HIGH,
+                    'low': LOW,
+                    'volume': VOLUME
+                }
+            df.rename(columns=new_names_map, inplace=True)
+
+            # Save the data in a dict for later use.
+            df_dict[ticker] = df
+        except:
+            # An error occurred so we just skip that ticker.
+            pass
+
+    # Combine the data into a single Pandas DataFrame.
+    df = pd.concat(df_dict, keys=df_dict.keys(), axis=0)
 
     return df
 
