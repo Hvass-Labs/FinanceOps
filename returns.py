@@ -442,4 +442,39 @@ def dividend_yield(df):
 
     return (df[DIVIDEND_TTM].ffill() / df[SHARE_PRICE]).rename(DIVIDEND_YIELD)
 
+
+def max_drawdown(df, window=None):
+    """
+    Calculate the Maximum Drawdown for all the individual columns in `df`.
+
+    This gives the Max Drawdown for each time-step, calculated either
+    from the beginning or from the preceding window of the given length.
+
+    If you want the worst drawdown that has occurred through all time-steps,
+    then you should call the `min()` function on the resulting DataFrame,
+    for example: `max_drawdown(df=df_prices).min()`
+
+    :param df:
+        Pandas DataFrame typically with share-prices but could have any data.
+        If the DataFrame contains data for more stocks, then the columns are
+        the stock-tickers and the rows are the time-steps.
+
+    :param window:
+        If `None` then calculate the Max Drawdown from the beginning.
+        If an integer then calculate the Max Drawdown for a rolling window
+        of that length.
+
+    :return:
+        Pandas DataFrame with the Max Drawdown time-series.
+    """
+    if window is None:
+        # Calculate Max Drawdown from the beginning.
+        max_dd = df / df.cummax() - 1.0
+    else:
+        # Calculate Max Drawdown for a rolling window.
+        max_dd = df / df.rolling(window=window).max() - 1.0
+
+    return max_dd
+
+
 ########################################################################
