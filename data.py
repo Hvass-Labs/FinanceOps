@@ -27,7 +27,7 @@ import time
 import os
 import requests
 from data_keys import *
-from returns import total_return
+import returns
 
 ########################################################################
 
@@ -344,7 +344,7 @@ def load_index_data(ticker, sales=True, book_value=True, dividend_TTM=True):
     # Calculate the Total Return.
     # The price-data from Yahoo does not contain the Total Return
     # for stock indices because it does not reinvest dividends.
-    df[TOTAL_RETURN] = total_return(df=df)
+    df[TOTAL_RETURN] = returns.total_return(df=df)
 
     # Load Sales Per Share data.
     if sales:
