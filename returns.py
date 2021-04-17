@@ -477,4 +477,46 @@ def max_drawdown(df, window=None):
     return max_dd
 
 
+def max_pullup(df, window=None):
+    """
+    Calculate the Maximum Pullup for all the individual columns in `df`.
+
+    This gives the Max Pullup for each time-step, calculated either
+    from the beginning or from the preceding window of the given length.
+
+    If you want the highest pullup that has occurred through all time-steps,
+    then you should call the `max()` function on the resulting DataFrame,
+    for example: `max_pullup(df=df_prices).max()`
+
+    Unlike the function `max_drawdown` which is typically calculated for the
+    entire DataFrame `df` by setting `window=None`, it is often more useful
+    to set the `window` parameter when calculating the Max Pullup using this
+    function. This is because many stocks tend to have increasing prices over
+    time, so the "pullup" or recovery from their historical lows is potentially
+    infinite over time. So it may be more useful to only consider the pullup
+    over e.g. 1-year periods by setting the `window` parameter accordingly.
+
+    :param df:
+        Pandas DataFrame typically with share-prices but could have any data.
+        If the DataFrame contains data for more stocks, then the columns are
+        the stock-tickers and the rows are the time-steps.
+
+    :param window:
+        If `None` then calculate the Max Pullup from the beginning.
+        If an integer then calculate the Max Pullup for a rolling window
+        of that length.
+
+    :return:
+        Pandas DataFrame with the Max Pullup time-series.
+    """
+    if window is None:
+        # Calculate Max Pullup from the beginning.
+        max_pu = df / df.cummin() - 1.0
+    else:
+        # Calculate Max Pullup for a rolling window.
+        max_pu = df / df.rolling(window=window).min() - 1.0
+
+    return max_pu
+
+
 ########################################################################
