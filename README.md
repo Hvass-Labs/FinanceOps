@@ -150,6 +150,15 @@ required Python packages:
 Note that you will need to run this every time you login to Google Colab.
 
 
+### Run in Docker
+
+Because many of these Notebooks and some of the Python packages also read/write
+data on the local disk, you would need to create so-called Docker volumes to
+enable persistent data-storage on your local disk. The instructions for setting
+this up would be complicated, and it seems much easier to run the Notebooks
+using one of the other methods above.
+
+
 ## Data Sources
 
 - Recent share-price and fundamental data from [SimFin](https://github.com/SimFin/simfin).
