@@ -86,17 +86,41 @@ You can also [download](https://github.com/Hvass-Labs/FinanceOps/archive/master.
 the contents of the GitHub repository as a Zip-file and extract it manually.
 
 
+## Installation
+
+If you want to run these tutorials on your own computer, then it is best
+to use a virtual environment when installing the required packages,
+so you can easily delete the environment again.
+
+The following command creates a virtual environment named `financeops`:
+
+    virtualenv financeops
+
+Or you can use [Anaconda](https://www.anaconda.com/download) instead of a virtualenv:
+
+    conda create --name financeops python=3
+
+Then you switch to the virtual environment and install the required packages:
+
+    source activate financeops
+    pip install -r requirements.txt
+
+When you are done working on the project you can deactivate the virtualenv:
+
+    source deactivate
+
+
 ## How To Run
 
-If you want to edit and run the Notebooks on your own computer, then it is
-suggested that you use the [Anaconda](https://www.anaconda.com/download)
-distribution of **Python 3.6** (or later) because it has all the required packages
-already installed. Once you have installed Anaconda, you run the following
-command from the `FinanceOps` directory to view and edit the Notebooks:
+Once you have installed the required Python packages in a virtual environment,
+you run the following commands from the `FinanceOps` directory to view, edit
+and run the Notebooks:
 
+    source activate financeops
     jupyter notebook
 
-If you want to edit the other source-code then you may use the free version of [PyCharm](https://www.jetbrains.com/pycharm/).
+If you want to edit the other source-code then you may use the free version of
+[PyCharm](https://www.jetbrains.com/pycharm/).
 
 
 ### Run in Google Colab
@@ -104,11 +128,14 @@ If you want to edit the other source-code then you may use the free version of [
 If you do not want to install anything on your own computer, then the Notebooks
 can be viewed, edited and run entirely on the internet by using
 [Google Colab](https://colab.research.google.com).
-You can click the "Google Colab"-link next to the research papers listed above.
+
+You click the "Google Colab"-link next to the research papers listed above.
 You can view the Notebook on Colab but in order to run it you need to login using
 your Google account.
+
 Then you need to execute the following commands at the top of the Notebook,
-which clones FinanceOps to your work-directory on Colab.
+which clones FinanceOps to your work-directory on Colab, and installs all the
+required Python packages:
 
     # Clone the repository from GitHub to Google Colab's temporary drive.
     import os
@@ -116,6 +143,11 @@ which clones FinanceOps to your work-directory on Colab.
     if not os.path.exists(work_dir):
         !git clone https://github.com/Hvass-Labs/FinanceOps.git
     os.chdir(work_dir)
+
+    # Install the required Python packages.
+    !pip install -r requirements.txt
+
+Note that you will need to run this every time you login to Google Colab.
 
 
 ## Data Sources
