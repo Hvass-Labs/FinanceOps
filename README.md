@@ -7,14 +7,28 @@ Original author is [Magnus Erik Hvass Pedersen](http://www.hvass-labs.org)
 
 ## Introduction
 
-This is a small collection of research papers on investing.
-They are written as Python Notebooks so they can easily be
+This is a collection of research papers on long-term investing, portfolio
+optimization, etc. They are written as Python Notebooks so they can easily be
 modified and run again.
 
 
-## Research
+## Papers
 
-1. Forecasting Long-Term Stock Returns ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
+The following Python Notebooks produce the plots and statistics for some of my
+"normal" research papers which can be downloaded from
+[SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
+and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
+
+- Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+
+- Does Volatility Harvesting Really Work? ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb))
+
+
+## Other Research
+
+The following Python Notebooks contain stand-alone research without "normal" papers.
+
+1. Basic Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01_Forecasting_Long-Term_Stock_Returns.ipynb))
 
 1-B. Better Long-Term Stock Forecasts ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/01B_Better_Long-Term_Stock_Forecasts.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/01B_Better_Long-Term_Stock_Forecasts.ipynb))
 
@@ -39,16 +53,6 @@ modified and run again.
 6. Forecasting Sales Growth ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/06_Forecasting_Sales_Growth.ipynb))
 
 7. Forecasting Dividends ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/07_Forecasting_Dividends.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/07_Forecasting_Dividends.ipynb))
-
-
-## Other Papers
-
-The following Python Notebooks produce the plots and statistics for some of my
-"normal" research papers which can be downloaded from
-[SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
-and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
-
-- Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
 
 
 ## Videos
@@ -118,6 +122,7 @@ which clones FinanceOps to your work-directory on Colab.
 
 - Recent share-price and fundamental data from [SimFin](https://github.com/SimFin/simfin).
 - Older share-price data from [Yahoo Finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC).
+- Intraday share-price data from [Alpha Vantage](https://www.alphavantage.co/)
 - Financial data for some individual stocks collected manually by the author from the 10-K Forms filed with the [U.S. SEC](http://www.sec.gov/cgi-bin/browse-edgar?company=&match=&CIK=jnj&filenum=&State=&Country=&SIC=&owner=exclude&Find=Find+Companies&action=getcompany).
 - Newer S&P 500 data from the [S&P Earnings & Estimates Report](http://www.spindices.com/documents/additional-material/sp-500-eps-est.xlsx) and older data from the research staff at S&P and Compustat (some older data is approximated by their research staff).
 - Financial data for Exchange Traded Funds (ETF) from Morningstar Direct.
