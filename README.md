@@ -19,9 +19,9 @@ The following Python Notebooks produce the plots and statistics for some of my
 [SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
 and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 
-- Long-Term Stock Forecasting ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+- Long-Term Stock Forecasting ([PDF](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3750775)) ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
 
-- Does Volatility Harvesting Really Work? ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb))
+- Does Volatility Harvesting Really Work? ([PDF](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3847692)) ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb)) ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb))
 
 
 ## Other Research
