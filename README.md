@@ -26,13 +26,13 @@ and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
 
 - Long-Term Stock Forecasting
-([PDF](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3750775))
+([PDF](https://ssrn.com/abstract=3750775))
 ([Video](https://www.youtube.com/watch?v=L8OtWNCQAAs))
 ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
 
 - Does Volatility Harvesting Really Work?
-([PDF](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3847692))
+([PDF](https://ssrn.com/abstract=3847692))
 ([Video](https://www.youtube.com/watch?v=t0AxhyQRRvM))
 ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb))
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Volatility_Harvesting.ipynb))
