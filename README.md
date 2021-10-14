@@ -19,6 +19,12 @@ The following Python Notebooks produce the plots and statistics for some of my
 [SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
 and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 
+- Simple Portfolio Optimization That Works!
+([PDF](https://ssrn.com/abstract=3942552))
+(Video)
+([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
+([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
+
 - Long-Term Stock Forecasting
 ([PDF](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3750775))
 ([Video](https://www.youtube.com/watch?v=L8OtWNCQAAs))
