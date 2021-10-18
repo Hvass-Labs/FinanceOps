@@ -818,7 +818,8 @@ def adjust_weights(weights_org, corr, weights_guess=None, fillna=True, log=None,
         index = weights_org.index
 
         # Convert Pandas to Numpy. This may or may not be a copy of the data.
-        weights_org = weights_org.to_numpy()
+        # Note: Flatten is necessary if it is a Pandas DataFrame.
+        weights_org = weights_org.to_numpy().flatten()
     else:
         # This is used to indicate that the input was not Pandas data.
         index = None
@@ -826,7 +827,8 @@ def adjust_weights(weights_org, corr, weights_guess=None, fillna=True, log=None,
     # Convert weights_guess from Pandas to Numpy.
     if isinstance(weights_guess, (pd.Series, pd.DataFrame)):
         # This may or may not be a copy of the data.
-        weights_guess = weights_guess.to_numpy()
+        # Note: Flatten is necessary if it is a Pandas DataFrame.
+        weights_guess = weights_guess.to_numpy().flatten()
 
     # Convert correlation matrix from Pandas to Numpy.
     if isinstance(corr, pd.DataFrame):
