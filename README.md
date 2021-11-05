@@ -28,7 +28,7 @@ and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 
 - Simple Portfolio Optimization That Works!
 ([PDF](https://ssrn.com/abstract=3942552))
-(Video)
+([Video](https://www.youtube.com/watch?v=5--5Ydtbu1Y))
 ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
 
