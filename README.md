@@ -12,6 +12,13 @@ optimization, etc. They are written as Python Notebooks so they can easily be
 modified and run again.
 
 
+## Python Package
+
+The [InvestOps](https://github.com/Hvass-Labs/InvestOps) Python package
+contains the main results and algorithms from this research, making it
+very easy to use in your own Python projects.
+
+
 ## Papers
 
 The following Python Notebooks produce the plots and statistics for some of my
