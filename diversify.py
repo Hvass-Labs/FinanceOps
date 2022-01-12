@@ -558,6 +558,9 @@ def _update_weights_elm(weights_org, weights_new, corr):
 
     This algorithm is described in Section 8.8 of the paper linked above.
 
+    WARNING: This should NOT be run in parallel with Numba Jit because there
+    is a "race condition" in the for-loop that would corrupt the results.
+
     :param weights_org:
         Numpy array with the original portfolio weights.
 
@@ -579,14 +582,11 @@ def _update_weights_elm(weights_org, weights_new, corr):
     max_abs_dif = 0.0
 
     # For each asset i in the portfolio.
-    # Note the use of prange() instead of range() which instructs Numba Jit
-    # to parallelize this loop, but only if @jit(parallel=True) was used,
-    # otherwise this just becomes the ordinary Python for-loop using range().
-    # Also note there is a "race condition" when this loop is run in parallel,
-    # because the weights_new array is both read and written inside the loop,
-    # but the algorithm can handle this for the same reason that it converges
-    # to the correct solution, as was proven in the paper referenced above.
-    for i in prange(n):
+    # WARNING! There is a "race condition" when this loop is run in parallel,
+    # because the array weights_new and the variable max_abs_dif are read and
+    # written by all the threads. It might be possible to make this parallel,
+    # but it would require some more research and development.
+    for i in range(n):
         # The new and original portfolio weights of asset i.
         w_new_i = weights_new[i]
         w_org_i = weights_org[i]
@@ -647,6 +647,9 @@ def _update_weights_inv(weights_org, weights_new, corr):
     calculations when using the Full Exposure to detect convergence, so this
     implementation is actually slower than the two other algorithm variants.
 
+    WARNING: This should NOT be run in parallel with Numba Jit because there
+    is a "race condition" in the for-loop that would corrupt the results.
+
     :param weights_org:
         Numpy array with the original portfolio weights.
 
@@ -668,10 +671,11 @@ def _update_weights_inv(weights_org, weights_new, corr):
     max_abs_dif = 0.0
 
     # For each asset i in the portfolio.
-    # Note the use of prange() instead of range() which instructs Numba Jit
-    # to parallelize this loop, but only if @jit(parallel=True) was used,
-    # otherwise this just becomes the ordinary Python range().
-    for i in prange(n):
+    # WARNING! There is a "race condition" when this loop is run in parallel,
+    # because the array weights_new and the variable max_abs_dif are read and
+    # written by all the threads. It might be possible to make this parallel,
+    # but it would require some more research and development.
+    for i in range(n):
         # The new and original portfolio weights of asset i.
         w_new_i = weights_new[i]
         w_org_i = weights_org[i]
