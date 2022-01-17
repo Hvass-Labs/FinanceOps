@@ -25,5 +25,6 @@ pygmo       # Multi-objective optimization.
 statsmodels # Statistical modelling.
 simfin      # Financial database.
 numba       # Numba Jit compiler.
+investops   # Investment tools.
 
 ################################################################

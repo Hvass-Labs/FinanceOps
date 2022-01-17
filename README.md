@@ -32,6 +32,12 @@ and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Simple_Portfolio_Optimization.ipynb))
 
+- Fast Portfolio Diversification
+([PDF](https://ssrn.com/abstract=4009041))
+([Video](https://www.youtube.com/watch?v=5--5Ydtbu1Y))
+([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Fast_Portfolio_Diversification.ipynb))
+([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Fast_Portfolio_Diversification.ipynb))
+
 - Long-Term Stock Forecasting
 ([PDF](https://ssrn.com/abstract=3750775))
 ([Video](https://www.youtube.com/watch?v=L8OtWNCQAAs))
