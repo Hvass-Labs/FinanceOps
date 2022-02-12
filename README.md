@@ -26,6 +26,12 @@ The following Python Notebooks produce the plots and statistics for some of my
 [SSRN](http://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=1993051)
 and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 
+- Long-Term Stock Forecasting
+([PDF](https://ssrn.com/abstract=3750775))
+([Video](https://www.youtube.com/watch?v=L8OtWNCQAAs))
+([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+
 - Simple Portfolio Optimization That Works!
 ([PDF](https://ssrn.com/abstract=3942552))
 ([Video](https://www.youtube.com/watch?v=5--5Ydtbu1Y))
@@ -38,11 +44,10 @@ and [GitHub](https://github.com/Hvass-Labs/Finance-Papers).
 ([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Fast_Portfolio_Diversification.ipynb))
 ([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Fast_Portfolio_Diversification.ipynb))
 
-- Long-Term Stock Forecasting
-([PDF](https://ssrn.com/abstract=3750775))
-([Video](https://www.youtube.com/watch?v=L8OtWNCQAAs))
-([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
-([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Long-Term_Stock_Forecasting.ipynb))
+- Portfolio Group Constraints
+([PDF](https://ssrn.com/abstract=4033243))
+([Notebook](https://github.com/Hvass-Labs/FinanceOps/blob/master/Paper_Portfolio_Group_Constraints.ipynb))
+([Google Colab](https://colab.research.google.com/github/Hvass-Labs/FinanceOps/blob/master/Paper_Portfolio_Group_Constraints.ipynb))
 
 - Does Volatility Harvesting Really Work?
 ([PDF](https://ssrn.com/abstract=3847692))
